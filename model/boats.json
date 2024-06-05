@@ -1,0 +1,41 @@
+{
+    "table": "boats",
+    "rows": [
+      {
+        "idBoat": 10,
+        "name": "Marbella",
+        "type": 1,
+        "pax": 6,
+        "price": 180.00
+      },
+      {
+        "idBoat": 11,
+        "name": "Caleta Velez",
+        "type": 1,
+        "pax": 6,
+        "price": 180.00
+      },
+      {
+        "idBoat": 12,
+        "name": "Benalmadena",
+        "type": 2,
+        "pax": 12,
+        "price": 300.00
+      },
+      {
+        "idBoat": 13,
+        "name": "Malaga",
+        "type": 2,
+        "pax": 12,
+        "price": 300.00
+      },
+      {
+        "idBoat": 14,
+        "name": "Marbella",
+        "type": 2,
+        "pax": 12,
+        "price": 300.00
+      }
+    ]
+  }
+  
