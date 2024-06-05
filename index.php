@@ -41,11 +41,11 @@
     <div class="container mb-4">
         <div class="row d-flex justify-content-center">
             <div class="col-md-3">
-            <div class="input-group">
-                <button class="btn btn-outline-secondary" type="button" id="prev-day">←</button>
-                <input type="date" class="form-control text-center" id="date-picker">
-                <button class="btn btn-outline-secondary" type="button" id="next-day">→</button>
-            </div>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" id="prev-day">←</button>
+                    <input type="date" class="form-control text-center" id="date-picker">
+                    <button class="btn btn-outline-secondary" type="button" id="next-day">→</button>
+                </div>
             </div>
         </div>
     </div>
@@ -63,6 +63,7 @@
                         <button class="btn btn-outline-secondary" type="button" id="prev-type">←</button>
                         <select class="form-control text-center" id="typeSelector" readonly>
                             <option value="1">5 Person</option>
+                            <option value="2">12 Person</option>
                         </select>       
                         <button class="btn btn-outline-secondary" type="button" id="next-type">→</button>
                     </div>
@@ -81,21 +82,11 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-center">
             <form id="reservaForm" method="post" action="booking.php">
-                <!-- Campo oculto para la fecha seleccionada -->
                 <input type="hidden" name="date" id="date" value="">
-
-                <!-- Campo oculto para la mesa seleccionada -->
                 <input type="hidden" name="selectedBoat" id="selectedBoat" value="">
-
-                <!-- Campo oculto para la hora de inicio -->
                 <input type="hidden" name="startTime" id="startTime" value="">
-
-                <!-- Campo oculto para la hora de fin -->
                 <input type="hidden" name="endTime" id="endTime" value="">
-
-                <!-- Campo oculto para el precio total -->
                 <input type="hidden" name="totalPrice" id="totalPrice" value="">
-
                 <button class="btn btn-primary mt-2" type="submit">Book Now!</button>
             </form>
         </div>
