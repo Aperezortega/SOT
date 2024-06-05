@@ -1,0 +1,29 @@
+.container {
+    margin-top: 20px;
+  }
+  .col {
+    padding: 10px;
+  }
+  .selected {
+    background-color: rgb(132, 204, 228);
+  }
+
+  .selected2 {
+    background-color: rgb(209, 243, 255);
+  }
+  .no-seleccionable {
+    pointer-events: none; /* Evita que se pueda hacer clic en la celda */
+    background-color: #f10000; /* Cambia el color de fondo para indicar que la celda no está disponible */
+    /* Otros estilos que desees para indicar la indisponibilidad */
+}
+
+@media(max-width: 600px  ){
+.email-card {
+  margin-top: 1vh;
+}
+}
+
+
+/* LOGIN */
+/* CSS used here will be applied after bootstrap.css */
+#formLogin{padding: 15px; min-width:300px;}
