@@ -1,6 +1,5 @@
 <?php include 'includes/head.php'; ?>
-<!-- Hero -->
-<div class="text-center bg-image rounded-3">
+<div class="text-center bg-image rounded-3 section" id="hero">
   <div class="mask">
     <div class="d-flex justify-content-center align-items-center h-100">
       <div class="text-white">
@@ -13,10 +12,11 @@
 </div>
 <!-- Hero -->
 <!-- Main content -->
-<div class="container-fluid p-2" id="about">
+<div class="container-fluid p-2 section" id="about">
     <div class="container my-5">
     <section>
         <h2 class="text-center mb-5 about">About us</h2>
+        
         <div class="row">
         <div class="col-lg-6">
             <div class="ratio ratio-16x9">
@@ -36,61 +36,49 @@
 </div>
 
 <!-- Book Now -->
-<div class="container-fluid p-2" id="bookNow">
-    <!-- Date picker -->
-    <div class="container mb-4">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-3">
-                <div class="input-group">
-                    <button class="btn btn-outline-secondary" type="button" id="prev-day">←</button>
-                    <input type="date" class="form-control text-center" id="date-picker">
-                    <button class="btn btn-outline-secondary" type="button" id="next-day">→</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Grid -->
+  <div class="container-fluid p-4" id="bookNow">
     <div class="container">
-        <div class="row">
-            <div class="card py-4 mx-0 mx-md-auto">
-                <!-- TITULO DE LA MESA -->
-                <div class="row text-center d-flex justify-content-center align-items-center">
-                    <div class="col-md-3">
-                        <span id="priceHour">€/H</span>
-                    </div>
-                    <div class="col-md-3">
-                    <div class="input-group mb-2">
-                        <button class="btn btn-outline-secondary" type="button" id="prev-type">←</button>
-                        <select class="form-control text-center" id="typeSelector" readonly>
-                            <option value="1">5 Person</option>
-                            <option value="2">12 Person</option>
-                        </select>       
-                        <button class="btn btn-outline-secondary" type="button" id="next-type">→</button>
-                    </div>
-
-                    </div>
-                    <div class="col-md-3">
-                        <span id="totalPrice">120€</span>
-                    </div>
-                </div>
-                <!-- GRID MESAS -->
-                <div class="card-body p-0">
-                    <div class="container-fluid" id="hourGrid"></div>
-                </div>
-
-    <!-- BOOK BTN & FORM -->
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <form id="reservaForm" method="post" action="booking.php">
-                <input type="hidden" name="date" id="date" value="">
-                <input type="hidden" name="selectedBoat" id="selectedBoat" value="">
-                <input type="hidden" name="startTime" id="startTime" value="">
-                <input type="hidden" name="endTime" id="endTime" value="">
-                <input type="hidden" name="totalPrice" id="totalPrice" value="">
-                <button class="btn btn-primary mt-2" type="submit">Book Now!</button>
-            </form>
+      <div class="row mt-2" >
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="benalmadena" autocomplete="off"> Benalmadena
+          </label>
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="malaga" autocomplete="off"> Malaga
+          </label>
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="marbella" autocomplete="off"> Marbella
+          </label>
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="option4" autocomplete="off"> Torre del Mar
+          </label>
         </div>
+      </div>
+      <!-- end row -->
+      <div class="row mt-4">
+        <div class="col-md-6 col-sm-12 d-flex justify-content-end">
+          <div class="" id="datepicker"></div>
+        </div>
+        <div class="col-md-6 col-sm-12 ">
+          <div class="btn-group btn-group-toggle d-flex flex-row" data-toggle="buttons" id="time-picker">
+            <label class="btn btn-outline mt-2">
+              <input  type="radio" name="options" id="benalmadena" autocomplete="off"> 12:00
+            </label>
+            <label class="btn btn-outline mt-2">
+              <input  type="radio" name="options" id="malaga" autocomplete="off"> 14:00
+            </label>
+            <label class="btn btn-outline mt-2">
+              <input type="radio" name="options" id="marbella" autocomplete="off"> 16:00
+            </label>
+            <label class="btn btn-outline mt-2">
+              <input type="radio" name="options" id="option4" autocomplete="off"> 18:00
+            </label>
+          </div>
+        </div>
+        <!-- end row-->
+      </div>
     </div>
-</div>
-</div>
+  </div>
+</div>   
+
 <?php include 'includes/footer.php'; ?>

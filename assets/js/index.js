@@ -1,88 +1,62 @@
 $(document).ready(function() {
-   /*
-    * DATE  & BOAT PICKER FUNCTIONALITY
-    *
-    */
-    
-    var today = new Date();
-    var datePicker = $('#date-picker');
-    var typeSelector = $('#typeSelector');
-    function formatDate(date) {
-        return date.toISOString().substring(0, 10);
-    }
-
-    var formattedToday = formatDate(today);
-    datePicker.val(formattedToday).attr('min', formattedToday);
-
- 
-    datePicker.change(function() {
-        var date = new Date($(this).val());
-        getHoursGrid(typeSelector.val(), formatDate(date));
-    });
-
-    $('#prev-day').click(function() {
-        var date = new Date(datePicker.val());
-        date.setDate(date.getDate() - 1);
-        today.setHours(0, 0, 0, 0);
-        if (date >= today) {
-            datePicker.val(formatDate(date));
-            getHoursGrid(typeSelector.val(), datePicker.val());
-        }
-    });
-
-    $('#next-day').click(function() {
-        var date = new Date(datePicker.val());
-        date.setDate(date.getDate() + 1);
-        datePicker.val(formatDate(date));
-        getHoursGrid(typeSelector.val(), datePicker.val());
-    });
-    typeSelector.change(function() {
-        getHoursGrid($(this).val(), datePicker.val());
-    });
-
-    $('#next-type, #prev-type').click(function() {
-        var $selectedOption = typeSelector.find('option:selected');
-        var $nextOrPrevOption = $(this).is('#next-type') ? $selectedOption.next('option') : $selectedOption.prev('option');
-        if ($nextOrPrevOption.length > 0) {
-          $selectedOption.prop('selected', false);
-          $nextOrPrevOption.prop('selected', true);
-          setTimeout(function() {
-            getHoursGrid(typeSelector.val(), datePicker.val());
-          }, 0);
-        }
-    });
-
-    function getHoursGrid(type, date) {
-      console.log(type, date);
-      $.ajax({
-        url: 'controller/controller.php?action=getHoursGrid',
-        method: 'POST',
-        data: {
-          type: type,
-          date: date
-        },
-        success: function(data) {
-          console.log(data);
-        data = JSON.parse(data); 
-        var html = '<div class="row titulos-tabla bg-light border">';
-        html += '<div class="col bg-light hora border border-end text-center">Horas</div>';
-        data.boats.forEach(function(boat) {
-            html += '<div class="col bg-light border nombre-columna text-center">' + boat.name + '</div>';
-        });
-        html += '</div>';
-        data.hours.forEach(function(hour) {
-            html += '<div class="row fila-contenido border" data-hora-inicio="' + hour.start + '" data-hora-fin="' + hour.finish + '">';
-            html += '<div class="col hora border text-center">' + hour.start + '-' + hour.finish + '</div>';
-            data.boats.forEach(function(boat) {
-                html += '<div class="col border mesa" data-mesa="' + boat.idBoat + '"></div>';
-            });
-            html += '</div>';
-        });
-        $('#hourGrid').html(html);
-        },
-        error: function(err) {
-          console.error(err);
-        }
+    $( function() {
+        $( "#datepicker" ).datepicker({
+          showOtherMonths: true,
+          selectOtherMonths: true
+        }).datepicker("setDate", new Date()); // Esto establece la fecha actual como seleccionada por defecto
       });
-    }
+      $(document).scroll(function() {
+        var desplazamiento = $(window).scrollTop();
+        $('#snow').css('transform', 'translateY(' + desplazamiento * 0.5 + 'px)');
+      });
+      var sections = ['#hero', '#about', '#bookNow']; // IDs de tus secciones
+      var currentSection = 0;
+  
+      $(window).on('wheel', function(e) {
+        e.preventDefault(); // Previene el scroll predeterminado
+    
+        // Variable para controlar el tiempo entre scrolls
+        if (window.allowScroll !== false) {
+            window.allowScroll = false; // Deshabilita nuevos scrolls
+    
+            if (e.originalEvent.deltaY > 0) {
+                // Scroll hacia abajo
+                if (currentSection < sections.length - 1) {
+                    currentSection++;
+                    $('html, body').animate({
+                        scrollTop: $(sections[currentSection]).offset().top
+                    }, 800); // Ajusta la duración del scroll aquí
+                }
+            } else {
+                // Scroll hacia arriba
+                if (currentSection > 0) {
+                    currentSection--;
+                    $('html, body').animate({
+                        scrollTop: $(sections[currentSection]).offset().top
+                    }, 800); // Ajusta la duración del scroll aquí
+                }
+            }
+    
+            // Espera 3 segundos antes de permitir otro scroll
+            setTimeout(function() {
+                window.allowScroll = true;
+            }, 400); // Ajusta el tiempo de espera aquí
+        }
+    });
+    $('.btn-group input[type="radio"]').on('change', function() {
+      // Remueve la clase 'selected' de todas las etiquetas 'label' dentro del grupo de botones
+      $('.btn-group label').removeClass('selected');
+      
+      // Agrega la clase 'selected' solo a la etiqueta 'label' correspondiente al botón de radio seleccionado
+      if ($(this).is(':checked')) {
+          $(this).closest('label').addClass('selected');
+      }
+  });
+  $("#datepicker").datepicker({
+    // Configuración para mostrar el datepicker inline
+    inline: true
+});
+$("#timepicker").timepicker({
+  // Configuraciones opcionales aquí
+});
 });
