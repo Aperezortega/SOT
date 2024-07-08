@@ -84,6 +84,7 @@ ABOUT
     color:#ffffff;
 
 }
+
 .navbar-row {
     height: 5vh;    
  }
@@ -93,6 +94,7 @@ ABOUT
  .about-row {
     height: 95vh;
     padding: 2.5vh;
+    padding-top: 20vh;
     background-color: rgba(0, 0, 0, 0.1); 
  }
 

@@ -1,10 +1,8 @@
 $(document).ready(function() {
-    $( function() {
-        $( "#datepicker" ).datepicker({
-          showOtherMonths: true,
-          selectOtherMonths: true
-        }).datepicker("setDate", new Date()); // Esto establece la fecha actual como seleccionada por defecto
-      });
+    $('#datepicker').hide();
+    $('#timepicker').hide();
+    let picker = null;
+   
       $(document).scroll(function() {
         var desplazamiento = $(window).scrollTop();
         $('#snow').css('transform', 'translateY(' + desplazamiento * 0.5 + 'px)');
@@ -43,20 +41,93 @@ $(document).ready(function() {
             }, 400); // Ajusta el tiempo de espera aquí
         }
     });
-    $('.btn-group input[type="radio"]').on('change', function() {
-      // Remueve la clase 'selected' de todas las etiquetas 'label' dentro del grupo de botones
-      $('.btn-group label').removeClass('selected');
-      
-      // Agrega la clase 'selected' solo a la etiqueta 'label' correspondiente al botón de radio seleccionado
-      if ($(this).is(':checked')) {
-          $(this).closest('label').addClass('selected');
-      }
-  });
-  $("#datepicker").datepicker({
-    // Configuración para mostrar el datepicker inline
-    inline: true
+   $('.btn-group input[type="radio"]').on('change', function() {
+    initializePicker();
+    var $btnGroup = $(this).closest('.btn-group');
+    $btnGroup.find('label').removeClass('selected');
+
+    if ($(this).is(':checked')) {
+        $(this).closest('label').addClass('selected');
+    }
+    if ($(this).attr('name') == 'PlaceOptions'){
+        $('#timepicker').hide();
+        $('#timepicker input[type="radio"]').prop('checked', false).closest('label').removeClass('selected');
+    }
 });
-$("#timepicker").timepicker({
-  // Configuraciones opcionales aquí
-});
+function initializePicker() {
+    $('#timepicker').hide();
+    $('#calendarTitle').text('Select Date & time');
+    if (picker){
+        picker.destroy();
+    }
+    let location = $('input[name="PlaceOptions"]:checked').attr('id');
+    console.log(location)
+   
+    picker = new easepick.create({
+        element: document.getElementById('datepicker'),
+        css: [
+          'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+        ],
+        inline: true,
+        startDate: new Date(),
+        plugins: [easepick.LockPlugin], // Asegúrate de incluir el plugin LockPlugin
+        LockPlugin: {
+            minDate: new Date(), // Deshabilita los días anteriores a la fecha actual
+        },
+        setup(picker) {
+            picker.on('select', (evt) => {
+                $('#timepicker').show();
+                const selectedDate = evt.detail.date.toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
+                console.log(selectedDate);
+                updateAvailableTimes(location, selectedDate);
+            });
+        }
+      });
+     
+     
+  }
+  function fetchBookings() {
+    return fetch('./model/bookings.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log the JSON response to the console
+            return data;
+        })
+        .catch(error => {
+            console.error('Error fetching bookings:', error);
+        });
+}
+function updateAvailableTimes(location, selectedDate) {
+    fetchBookings().then(bookings => {
+        if (bookings[location]) {
+            const locationBookings = bookings[location];
+            const bookedTimes = locationBookings
+                .filter(booking => booking.date === selectedDate) // Filtra por la fecha seleccionada
+                .map(booking => booking.time);
+
+            $('#timepicker input[type="radio"]').each(function() {
+                const hour = $(this).attr('id');
+                if (bookedTimes.includes(hour)) {
+                    $(this).prop('disabled', true).closest('label').addClass('disabled');
+                    $(this).closest('label').addClass('text-secondary');
+                } else {
+                    $(this).prop('disabled', false).closest('label').removeClass('disabled');
+                    $(this).closest('label').removeClass('text-secondary');
+                }
+            });
+        } else {
+            // Si no hay reservas para la ubicación seleccionada, habilitar todos los horarios
+            $('#timepicker input[type="radio"]').prop('disabled', false).closest('label').removeClass('disabled');
+        }
+    }).catch(error => {
+        console.error('Error fetching bookings:', error);
+    });
+}
+
+
 });
