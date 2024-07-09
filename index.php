@@ -1,4 +1,5 @@
 <?php include 'includes/head.php'; ?>
+<?php include 'payment.php'; ?>
 <!-- hero -->
  <div id="snow"></div>
  <div class="container-fluid" id="hero">
@@ -102,7 +103,39 @@
     </div>
     <hr style="color: white;">
     <div class="row d-flex flex-row justify-content-center">
-    <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">BOOK NOW</button>
+    <button type="button" id="confirmBooking" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">BOOK NOW</button>
     </div>
 </div>
+    <!-- Ventana Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <form action="https://sis-t.redsys.es:25443/sis/realizarPago" method="POST" target="_blank">
+                    <input type="hidden" name="Ds_SignatureVersion" value="HMAC_SHA256_V1"/>
+                    <input type="hidden" name="Ds_MerchantParameters" value="<?php echo $params; ?>"/>
+                    <input type="hidden" name="Ds_Signature" value="<?php echo $firma; ?>"/>
+                    <input  id="procederPago"type="submit" value="Realizar Pago" disabled/>
+               
+                    <!-- Aquí puedes agregar los detalles de la reserva como fecha, puerto, hora -->
+                    <p>Date: <span id="bookingDate">--/--/----</span></p>
+                    <p>Port: <span id="bookingPort">---</span></p>
+                    <p>Time: <span id="bookingTime">--:--</span></p>
+                    <p>Price: 250€</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Pay now</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <?php include 'includes/footer.php'; ?>

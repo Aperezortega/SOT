@@ -2,6 +2,7 @@ $(document).ready(function() {
     $('#datepicker').hide();
     $('#timepicker').hide();
     let picker = null;
+    let selectedDate = null;
    
       $(document).scroll(function() {
         var desplazamiento = $(window).scrollTop();
@@ -38,11 +39,11 @@ $(document).ready(function() {
             // Espera 3 segundos antes de permitir otro scroll
             setTimeout(function() {
                 window.allowScroll = true;
-            }, 400); // Ajusta el tiempo de espera aquí
+            }, 250); // Ajusta el tiempo de espera aquí
         }
     });
    $('.btn-group input[type="radio"]').on('change', function() {
-    initializePicker();
+   
     var $btnGroup = $(this).closest('.btn-group');
     $btnGroup.find('label').removeClass('selected');
 
@@ -50,10 +51,21 @@ $(document).ready(function() {
         $(this).closest('label').addClass('selected');
     }
     if ($(this).attr('name') == 'PlaceOptions'){
-        $('#timepicker').hide();
+        initializePicker();
         $('#timepicker input[type="radio"]').prop('checked', false).closest('label').removeClass('selected');
     }
 });
+$('#confirmBooking').click(function() {
+   // Obtener los valores seleccionados
+   let selectedPort = $('input[name="PlaceOptions"]:checked').attr('id');
+   let selectedTime = $('#timepicker input[type="radio"]:checked').attr('id');
+
+   // Actualizar el contenido del modal con la información seleccionada
+    $('#bookingDate').text(selectedDate);
+    $('#bookingPort').text(selectedPort);
+    $('#bookingTime').text(selectedTime);
+    $('#bookingModal').modal('show');
+  });
 function initializePicker() {
     $('#timepicker').hide();
     $('#calendarTitle').text('Select Date & time');
@@ -77,7 +89,7 @@ function initializePicker() {
         setup(picker) {
             picker.on('select', (evt) => {
                 $('#timepicker').show();
-                const selectedDate = evt.detail.date.toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
+                selectedDate = evt.detail.date.toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });
                 console.log(selectedDate);
                 updateAvailableTimes(location, selectedDate);
             });
