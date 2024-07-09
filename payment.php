@@ -7,7 +7,7 @@ $price = 250;
 
 $url = "http://localhost/sot/index.php?token=$token";
 $urlOK = "http://localhost/sot/result.php?state=ok";
-$urlKO = "http://localhost/mesas/result.php?state=ko";
+$urlKO = "http://localhost/sot/result.php?state=ko";
 
 $miObj = new RedsysAPI;
 $miObj->setParameter("DS_MERCHANT_AMOUNT", $price);

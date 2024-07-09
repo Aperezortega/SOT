@@ -1,8 +1,9 @@
 $(document).ready(function() {
+    var selectedDate, selectedPort, selectedTime;
     $('#datepicker').hide();
     $('#timepicker').hide();
     let picker = null;
-    let selectedDate = null;
+  
    
       $(document).scroll(function() {
         var desplazamiento = $(window).scrollTop();
@@ -57,14 +58,17 @@ $(document).ready(function() {
 });
 $('#confirmBooking').click(function() {
    // Obtener los valores seleccionados
-   let selectedPort = $('input[name="PlaceOptions"]:checked').attr('id');
-   let selectedTime = $('#timepicker input[type="radio"]:checked').attr('id');
+   selectedPort = $('input[name="PlaceOptions"]:checked').attr('id');
+   selectedTime = $('#timepicker input[type="radio"]:checked').attr('id');
 
    // Actualizar el contenido del modal con la información seleccionada
     $('#bookingDate').text(selectedDate);
     $('#bookingPort').text(selectedPort);
     $('#bookingTime').text(selectedTime);
     $('#bookingModal').modal('show');
+    localStorage.setItem('selectedDate', selectedDate);
+    localStorage.setItem('selectedTime', selectedTime);
+    localStorage.setItem('selectedPort', selectedPort);
   });
 function initializePicker() {
     $('#timepicker').hide();
@@ -116,26 +120,21 @@ function initializePicker() {
 }
 function updateAvailableTimes(location, selectedDate) {
     fetchBookings().then(bookings => {
-        if (bookings[location]) {
-            const locationBookings = bookings[location];
-            const bookedTimes = locationBookings
-                .filter(booking => booking.date === selectedDate) // Filtra por la fecha seleccionada
-                .map(booking => booking.time);
+        // Filtrar reservas por lugar y fecha seleccionados
+        const filteredBookings = bookings.filter(booking => booking.place === location && booking.date === selectedDate);
+        const bookedTimes = filteredBookings.map(booking => booking.time); // Extraer solo los tiempos
 
-            $('#timepicker input[type="radio"]').each(function() {
-                const hour = $(this).attr('id');
-                if (bookedTimes.includes(hour)) {
-                    $(this).prop('disabled', true).closest('label').addClass('disabled');
-                    $(this).closest('label').addClass('text-secondary');
-                } else {
-                    $(this).prop('disabled', false).closest('label').removeClass('disabled');
-                    $(this).closest('label').removeClass('text-secondary');
-                }
-            });
-        } else {
-            // Si no hay reservas para la ubicación seleccionada, habilitar todos los horarios
-            $('#timepicker input[type="radio"]').prop('disabled', false).closest('label').removeClass('disabled');
-        }
+        $('#timepicker input[type="radio"]').each(function() {
+            const timeId = $(this).attr('id');
+            // Comprobar si el tiempo actual está en la lista de tiempos reservados
+            if (bookedTimes.includes(timeId)) {
+                $(this).prop('disabled', true).closest('label').addClass('disabled');
+                $(this).closest('label').addClass('text-secondary');
+            } else {
+                $(this).prop('disabled', false).closest('label').removeClass('disabled');
+                $(this).closest('label').removeClass('text-secondary');
+            }
+        });
     }).catch(error => {
         console.error('Error fetching bookings:', error);
     });
